@@ -14,6 +14,7 @@ import android.os.PowerManager.WakeLock;
 import android.util.Log;
 
 import com.smartdevicelink.exception.SdlException;
+import com.smartdevicelink.permission.SdlPermissionManager;
 import com.smartdevicelink.protocol.enums.FunctionID;
 import com.smartdevicelink.proxy.RPCRequest;
 import com.smartdevicelink.proxy.SdlProxyALM;
@@ -89,7 +90,7 @@ public final class SdlManager implements IProxyListenerALM {
     // IDs for SDLFeatures
     /**
      * Flag for use with {@link SdlManager#getSdlFeature(int)} to request the instance of
-     * SdlPermissionManager.
+     * {@link com.smartdevicelink.permission.SdlPermissionManager}.
      */
     public static final int FEATURE_PERMISSION_MANAGER = 1;
     /**
@@ -100,9 +101,7 @@ public final class SdlManager implements IProxyListenerALM {
 
     // TODO: Make members more organized and pretty.
 
-
-    // TODO: Uncomment when feature/permission_manager is merged
-    //private static SdlPermissionManager mSdlPermissionManager;
+    private static SdlPermissionManager mSdlPermissionManager;
 
     private static final String TAG = "SdlManager";
 
@@ -192,10 +191,9 @@ public final class SdlManager implements IProxyListenerALM {
             mInstance = new SdlManager();
 
             // Link submanager listeners
-            // TODO: Uncomment when feature/permission_manager is merged
-            /*mSdlPermissionManager = new SdlPermissionManager();
+            mSdlPermissionManager = new SdlPermissionManager();
             mInstance.addNotificationListener(FunctionID.ON_PERMISSIONS_CHANGE,
-                    mSdlPermissionManager.getPermissionChangeListener());*/
+                    mSdlPermissionManager.getPermissionChangeListener());
 
             mConnectionConfig = config;
             serviceClass = config.serviceClass;
@@ -215,13 +213,11 @@ public final class SdlManager implements IProxyListenerALM {
      * @return The feature manager requested. Must be cast to the correct type.
      */
     public static Object getSdlFeature(int flag){
-        // TODO: Uncomment when feature/permission_manager is merged
-        /*if(flag == FEATURE_PERMISSION_MANAGER){
+        if(flag == FEATURE_PERMISSION_MANAGER){
             return mSdlPermissionManager;
         } else{
             return null;
-        }*/
-        return null;
+        }
     }
 
     /**
