@@ -2,6 +2,7 @@ package com.smartdevicelink.proxy.rpc;
 
 import java.util.Hashtable;
 import java.util.List;
+import java.lang.String;
 
 import com.smartdevicelink.protocol.enums.FunctionID;
 import com.smartdevicelink.proxy.RPCRequest;
@@ -23,6 +24,21 @@ public class SendLocation extends RPCRequest{
     public static final String KEY_PHONE_NUMBER         = "phoneNumber";
     public static final String KEY_ADDRESS_LINES        = "addressLines";
     public static final String KEY_LOCATION_IMAGE       = "locationImage";
+
+    private Long timestamp;
+    private SendLocationType sendType;
+
+    public enum SendLocationType {
+            QUEUE(1), DIRECT(2), CONFIRMED(3);
+
+        private final int value;
+
+        SendLocationType(final int newValue) {
+            value = newValue;
+        }
+
+        public int getValue() { return value; }
+    }
 
     /**
      * Constructs a new SendLocation object
@@ -219,6 +235,30 @@ public class SendLocation extends RPCRequest{
         else{
             parameters.remove(KEY_LOCATION_IMAGE);
         }
+    }
+
+    public void setTimestamp(Long timestamp){
+        this.timestamp = timestamp;
+    }
+
+    public void setSendType{SendLocationType sendType){
+        this.sendType = sendType;
+    }
+
+    public String poc_addressString(){
+        String addressString;
+        for(String addr : getAddressLines()){
+            addressString += addr + ", ";
+        }
+        if (addressString.endsWith(", ")){
+            addressString = addressString.subSequence(0, addressString.length() - 2);
+        }
+
+        return addressString;
+    }
+
+    public String poc_sendLocationString(){
+        return "||" + this.getLocationName() + "=_" + this.poc_addressString() + "=_" + this.getLatitudeDegrees() + "=_" + this.getLongitudeDegrees() + "=_" + this.timestamp / 1000 + "=_" + this.sendType.getValue();
     }
 
 }
